@@ -43,6 +43,39 @@ Card rotatedCard(Card card) {
     };
 }
 
+// helper procedure for getPossibleMoves
+void resolveMove(vector<Move>* moves, Card card, int dx, int dy, int x, int y) {
+    if (!(dx == 0 && dy == 0)) {
+        int newX = x + dx;
+        int newY = y + dy;
+        if (newX >= 0 && newX < boardWidth && newY >= 0 && newY < boardHeight) {
+            moves->push_back(Move{card, x, y, newX, newY});
+        }
+    }
+}
+
+void getPossibleMoves(vector<Move>* moves, Card card, int x, int y) {
+    resolveMove(moves, card, card.dx1, card.dy1, x, y);
+    resolveMove(moves, card, card.dx2, card.dy2, x, y);
+    resolveMove(moves, card, card.dx3, card.dy3, x, y);
+    resolveMove(moves, card, card.dx4, card.dy4, x, y);
+}
+
+vector<Move> getPossibleMoves(char board[boardWidth][boardHeight], Card card1, Card card2, int player) {
+    vector<Move> moves(0);
+    for(int row = 0; row < boardHeight; row++) {
+        for(int column = 0; column < boardWidth; column++) {
+            if (player == 0 && tolower(board[column][row]) == 'w') {
+                getPossibleMoves(&moves, card1 ,column, row);
+                getPossibleMoves(&moves, card2 ,column, row);
+            } else if (player == 1 && tolower(board[column][row]) == 'b') {
+                getPossibleMoves(&moves, card1 ,column, row);
+                getPossibleMoves(&moves, card2 ,column, row);
+            }
+        }
+    }
+    return moves;
+}
 
 /**
  * Funkcia, ktorá na štandardný výstup vypíše obsah poľa znakov 5x5
@@ -96,10 +129,6 @@ int main() {
             board[column][row] = rowText[column];
         }
     }
-
-
-    printBoard(board);
-    cout << "Score is: " << scoreBoard(board) << endl;
 
     return 0;
 }
