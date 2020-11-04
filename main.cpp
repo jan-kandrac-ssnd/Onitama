@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -9,6 +10,39 @@ const int scoreWhiteMaster = 10;
 const int scoreWhiteStudent = 1;
 const int scoreBlackMaster = -10;
 const int scoreBlackStudent = -1;
+
+/**
+ * Štruktúra kartičky doslova kopírujúca zadanie úlohy:
+ * 4 dvojice súradníc, ktoré definujú deltu od úvodnej pozície
+ *
+ * Teda napr. aplikovanie dx1=-1 a dx2=2 na pozíciu [2,1] má
+ * vo výsledku [1,3]
+ */
+struct Card {
+    int id;
+    int dx1, dy1, dx2, dy2;
+    int dx3, dy3, dx4, dy4;
+};
+
+struct Move {
+    Card card;
+    int x1, y1, x2, y2;
+};
+
+/**
+ * Jednoduché otočenie kartičky podľa stredu
+ *
+ * @param card kartička na otočenie
+ * @return nová otočená kartička
+ */
+Card rotatedCard(Card card) {
+    return Card {
+        card.id,
+        -card.dx1, -card.dy1, -card.dx2, -card.dy2,
+        -card.dx3, -card.dy3, -card.dx4, -card.dy4
+    };
+}
+
 
 /**
  * Funkcia, ktorá na štandardný výstup vypíše obsah poľa znakov 5x5
